@@ -1,10 +1,10 @@
 import os
 from itertools import accumulate
+import textwrap
 
 input = os.path.join(os.path.dirname(__file__), "input.txt")
 
 instructions = []
-
 
 for line in open(input, 'r').read().splitlines():
     instructions.append(line)
@@ -23,9 +23,16 @@ for i, instruction in enumerate(instructions):
 
 register_values = list(accumulate(register_values))
 
-signals = []
-for cycle, register_value in enumerate(register_values):
-    signals.append(cycle*register_values[cycle-1])
+sol1 = sum([i * register_values[i-1] for i in range(20, len(register_values), 40)])
+print('Solution to part 1: ' + str(sol1))
 
-print('Solution to part 1: '+ str(sum([signals[20], signals[60], signals[100], signals[140], signals[180], signals[220]])))
-
+screen = ''
+width = 40
+for i in range(0, len(register_values)-1):
+    sprite = register_values[i]
+    if (sprite - 1) <= (i % width) and (i % 40) <= (sprite + 1):
+        screen += '#'
+    else:
+        screen += '.'
+        
+print(textwrap.fill(screen, width))  # EALGULPG
